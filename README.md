@@ -1,5 +1,7 @@
 ## Repcal
 
+A python script that converts dates and time to the systems used by the French Republic from 1793 to 1805.
+
 ### As a package
 
 ```python
@@ -20,3 +22,8 @@ print(str(dt)) # 8:1:65
 $ python3 -m repcal
 8:1:65, octidi 28 Vendémiaire an CCXXIX
 ```
+
+### Todo
+* Week number (decade)
+* Rural calendar items
+* More cli functionality
