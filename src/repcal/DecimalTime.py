@@ -1,19 +1,19 @@
 from datetime import datetime, date, time
 from math import floor
+from .RepublicanFormatter import RepublicanFormatter
 
 
 class DecimalTime:
+    default_formatting = '{%H}:{%M}:{%S}'
+
     def __init__(self, hour, minute, second):
         self.hour = hour
         self.minute = minute
         self.second = second
 
     def __str__(self):
-        return '{}:{}:{}'.format(
-            self.hour,
-            self.minute,
-            self.second
-        )
+        formatter = RepublicanFormatter(dtime=self)
+        return formatter.format(self.default_formatting)
 
     @classmethod
     def from_standard_time(cls, standard_time, adjust_to_paris_mean=True):

@@ -1,7 +1,10 @@
 from datetime import date
+from .RepublicanFormatter import RepublicanFormatter
 
 
 class RepublicanDate:
+    default_formatting = '{%A} {%d} {%B} an {%Y}'
+
     months = ('Vendémiaire', 'Brumaire', 'Frimaire', 'Nivôse', 'Pluviôse', 'Ventôse',
               'Germinal', 'Floréal', 'Prairial', 'Messidor', 'Thermidor', 'Fructidor',
               'Sansculottides')
@@ -25,18 +28,8 @@ class RepublicanDate:
         self.week_day_index = week_day_index
 
     def __str__(self):
-        if self.is_sansculottides():
-            return '{} an {}'.format(
-                self.get_weekday(),
-                self.get_year_roman()
-            )
-        else:
-            return '{} {} {} an {}'.format(
-                self.get_weekday(),
-                self.get_day(),
-                self.get_month(),
-                self.get_year_roman()
-            )
+        formatter = RepublicanFormatter(rdate=self)
+        return formatter.format(self.default_formatting)
 
     def get_year_arabic(self):
         return self.year
