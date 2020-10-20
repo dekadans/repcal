@@ -9,6 +9,6 @@ dtime = DecimalTime.from_standard_time(t.time())
 rdate = RepublicanDate.from_gregorian(t.date())
 
 print('{}, {}'.format(
-    str(dtime),
-    str(rdate)
+    dtime,
+    rdate
 ))

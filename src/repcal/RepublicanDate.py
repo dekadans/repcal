@@ -3,7 +3,8 @@ from datetime import date
 
 class RepublicanDate:
     months = ('Vendémiaire', 'Brumaire', 'Frimaire', 'Nivôse', 'Pluviôse', 'Ventôse',
-              'Germinal', 'Floréal', 'Prairial', 'Messidor', 'Thermidor', 'Fructidor')
+              'Germinal', 'Floréal', 'Prairial', 'Messidor', 'Thermidor', 'Fructidor',
+              'Sansculottides')
 
     days = ('primidi', 'duodi', 'tridi', 'quartidi', 'quintidi',
             'sextidi', 'septidi', 'octidi', 'nonidi', 'décadi')
@@ -65,6 +66,9 @@ class RepublicanDate:
 
     def get_month(self):
         return self.months[self.month_index]
+
+    def get_week_number(self):
+        return str(self.month_day_index // 10 + 1)
 
     def get_day(self):
         return str(self.month_day_index+1)
