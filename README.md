@@ -16,14 +16,8 @@ print(rd) # octidi 28 Vendémiaire an CCXXIX
 print(dt) # 8:1:65
 ```
 
-### As a script
 
-```
-$ python3 -m repcal
-8:1:65, octidi 28 Vendémiaire an CCXXIX
-```
-
-### RepublicanDate instance methods
+#### RepublicanDate instance methods
 
 | Method              | Example return value |
 | ------------------- | -------------------- |
@@ -37,6 +31,14 @@ $ python3 -m repcal
 
 Note that for compatibility purposes, if the date is a complementary day then _get_month()_
 will return "Sansculottides" despite this not being an actual month.
+
+### As a script
+
+```
+$ python3 -m repcal
+8:1:65, octidi 28 Vendémiaire an CCXXIX
+```
+
 
 ### Todo
 * Rural calendar items
