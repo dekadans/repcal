@@ -20,6 +20,8 @@ print(dt) # 8:1:65
 
 ### As a script
 
+_The script uses Paris Mean Time (6.49 decimal minutes ahead of GMT)._
+
 ```
 $ python3 -m repcal
 8:1:65, octidi 28 Vendémiaire an CCXXIX
@@ -44,7 +46,3 @@ $ python3 -m repcal '1969-07-20' --format '{%d} {%B}'
 | Minute           | minute                   | %M                 | _1_                   |
 | Second           | second                   | %S                 | _65_                  |
 
-
-### Todo
-* Rural calendar items
-* More cli functionality

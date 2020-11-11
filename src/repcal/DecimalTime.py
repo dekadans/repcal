@@ -17,7 +17,7 @@ class DecimalTime:
         return formatter.format(self.default_formatting)
 
     @classmethod
-    def from_standard_time(cls, standard_time, adjust_to_paris_mean=True):
+    def from_standard_time(cls, standard_time, adjust_to_paris_mean=False):
         """
         Takes a time object and converts to decimal.
         If adjust_to_paris_mean is true the given time will be assumed to be GMT

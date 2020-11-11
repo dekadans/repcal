@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import argparse
 from .RepublicanDate import RepublicanDate
 from .DecimalTime import DecimalTime
 from .RepublicanFormatter import RepublicanFormatter
+from .paris_mean import paris_mean
 
 default_formatting = DecimalTime.default_formatting + ', ' + RepublicanDate.default_formatting
 
@@ -17,14 +18,7 @@ if args.date is None:
 else:
     t = datetime.fromisoformat(args.date)
 
-dtime = DecimalTime.from_standard_time(t.time())
-
-if dtime.date_turnover:
-    t += timedelta(days=1)
-
-rdate = RepublicanDate.from_gregorian(t.date())
+rdate, dtime = paris_mean(t)
 
 formatter = RepublicanFormatter(rdate=rdate, dtime=dtime)
-format_string = args.format
-
-print(formatter.format(format_string))
+print(formatter.format(args.format))
