@@ -10,7 +10,7 @@ It uses the Romme method of calculating leap years, as in keeping the ones used 
 from repcal import RepublicanDate, DecimalTime
 from datetime import datetime
 
-n = datetime.utcnow()
+n = datetime.now()
 rd = RepublicanDate.from_gregorian(n.date())
 dt = DecimalTime.from_standard_time(n.time())
 
