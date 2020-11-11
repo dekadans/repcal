@@ -31,18 +31,24 @@ $ python3 -m repcal '1969-07-20' --format '{%d} {%B}'
 ```
 
 
-### API and formatting options
+### RepublicanDate API
 
-| Value            | Instance method/property | Format placeholder | Example               |
-| ---------------- | ------------------------ | ------------------ | --------------------- |
-| Year (arabic)    | get_year_arabic()        | %y                 | _219_                 |
-| Year (roman)     | get_year_roman()         | %Y                 | _CCXXIX_              |
-| Month            | get_month()              | %B                 | _Vendémiaire_         |
-| Week (décade)    | get_week_number()        | %W                 | _3_                   |
-| Day in month     | get_day()                | %d                 | _28_                  |
-| Day in week      | get_weekday()            | %A                 | _octidi_              |
-| Is complementary | is_sansculottides()      | --                 | _false_               |
-| Hour             | hour                     | %H                 | _8_                   |
-| Minute           | minute                   | %M                 | _1_                   |
-| Second           | second                   | %S                 | _65_                  |
+| Value            | Instance method     | Format placeholder | Example               |
+| ---------------- | ------------------- | ------------------ | --------------------- |
+| Year (arabic)    | get_year_arabic()   | %y                 | _219_                 |
+| Year (roman)     | get_year_roman()    | %Y                 | _CCXXIX_              |
+| Month            | get_month()         | %B                 | _Vendémiaire_         |
+| Week (décade)    | get_week_number()   | %W                 | _3_                   |
+| Day in month     | get_day()           | %d                 | _28_                  |
+| Day in week      | get_weekday()       | %A                 | _octidi_              |
+| Is complementary | is_sansculottides() | --                 | _false_               |
+
+
+### DecimalTime API
+
+| Value            | Property | Format placeholder | Example               |
+| ---------------- | -------- | ------------------ | --------------------- |
+| Hour             | hour     | %H                 | _8_                   |
+| Minute           | minute   | %M                 | _1_                   |
+| Second           | second   | %S                 | _65_                  |
 
