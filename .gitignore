@@ -1,3 +1,6 @@
 .idea
-src/repcal/__pycache__
-src/repcal/*.pyc
+*__pycache__/
+*.pyc
+build/
+dist/
+*.egg-info/
