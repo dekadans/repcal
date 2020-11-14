@@ -5,6 +5,12 @@ More information can be found on [Wikipedia](https://en.wikipedia.org/wiki/Frenc
 
 It uses the Romme method of calculating leap years, as in keeping the ones used by the French Republic and using the Gregorian rules for the years after the calendar was abolished.
 
+### Installation
+
+```
+$ pip install repcal
+```
+
 ### Usage
 
 The current local time is used by default.
