@@ -28,8 +28,10 @@ class RepublicanDate:
         self.week_day_index = week_day_index
 
     def __str__(self):
-        formatter = RepublicanFormatter(rdate=self)
-        return formatter.format(self.default_formatting)
+        return self.get_formatter().format(self.default_formatting)
+
+    def get_formatter(self):
+        return RepublicanFormatter(rdate=self)
 
     def get_year_arabic(self):
         return self.year
