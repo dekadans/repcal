@@ -9,8 +9,8 @@ class RepublicanDate:
               'Germinal', 'Floréal', 'Prairial', 'Messidor', 'Thermidor', 'Fructidor',
               'Sansculottides')
 
-    days = ('primidi', 'duodi', 'tridi', 'quartidi', 'quintidi',
-            'sextidi', 'septidi', 'octidi', 'nonidi', 'décadi')
+    days = ('Primidi', 'Duodi', 'Tridi', 'Quartidi', 'Quintidi',
+            'Sextidi', 'Septidi', 'Octidi', 'Donidi', 'Décadi')
 
     sansculottides = (
         'La Fête de la Vertu',
@@ -60,13 +60,13 @@ class RepublicanDate:
         return roman
 
     def get_month(self):
-        return self.months[self.month_index]
+        return self.months[self.month_index] if not self.is_sansculottides() else None
 
     def get_week_number(self):
-        return str(self.month_day_index // 10 + 1)
+        return (self.month_day_index // 10 + 1) if not self.is_sansculottides() else None
 
     def get_day(self):
-        return str(self.month_day_index+1)
+        return self.month_day_index+1 if not self.is_sansculottides() else None
 
     def get_weekday(self):
         if self.is_sansculottides():
