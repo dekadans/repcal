@@ -21,11 +21,6 @@ class DecimalTime:
     def from_standard_time(cls, standard_time):
         """
         Takes a time object and converts to decimal.
-        If adjust_to_paris_mean is true the given time will be assumed to be GMT
-        and the resulting decimal time is adjusted to Paris Mean Time.
-        Note: if we're adjusting to Paris time, moments close to midnight GMT
-        will result in a date turnover
-
         :param standard_time: datetime.time
         :return: string
         """

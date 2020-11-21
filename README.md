@@ -17,30 +17,30 @@ The current local time is used by default.
 
 ```
 $ repcal
-5:80:63, quartidi 24 Brumaire an CCXXIX
+5:80:63, quartidi 24 brumaire an CCXXIX
 ```
 
 Or, for the full Republican experience, it can default to Paris Mean Time (6.49 decimal minutes ahead of GMT).
 
 ```
 $ repcal --paris-mean
-5:45:47, quartidi 24 Brumaire an CCXXIX
+5:45:47, quartidi 24 brumaire an CCXXIX
 ```
 
 It also accepts date, time and format as arguments.
 
 ```
 $ repcal '1969-07-20 20:17:40'
-8:45:60, primidi 1 Thermidor an CLXXVII
+8:45:60, primidi 1 thermidor an CLXXVII
 
 $ repcal '1969-07-20'
-primidi 1 Thermidor an CLXXVII
+primidi 1 thermidor an CLXXVII
 
 $ repcal '20:17:40'
 8:45:60
 
 $ repcal '1969-07-20' --format '{%d} {%B}'
-1 Thermidor
+1 thermidor
 ```
 
 ### As a Python package
@@ -53,7 +53,7 @@ n = datetime.now()
 rd = RepublicanDate.from_gregorian(n.date())
 dt = DecimalTime.from_standard_time(n.time())
 
-print(rd) # quartidi 24 Brumaire an CCXXIX
+print(rd) # quartidi 24 brumaire an CCXXIX
 print(dt) # 5:79:47
 ```
 
@@ -63,7 +63,7 @@ print(dt) # 5:79:47
 | ---------------- | ------------------- | ------------------ | --------------------- |
 | Year (arabic)    | get_year_arabic()   | %y                 | _219_                 |
 | Year (roman)     | get_year_roman()    | %Y                 | _CCXXIX_              |
-| Month            | get_month()         | %B                 | _Vendémiaire_         |
+| Month            | get_month()         | %B                 | _vendémiaire_         |
 | Week (décade)    | get_week_number()   | %W                 | _3_                   |
 | Day in month     | get_day()           | %d                 | _28_                  |
 | Day in week      | get_weekday()       | %A                 | _octidi_              |
