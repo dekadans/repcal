@@ -57,6 +57,10 @@ print(rd) # quartidi 24 brumaire an CCXXIX
 print(dt) # 5:79:47
 ```
 
+### As a web service
+
+[Repcal.info](https://repcal.info) hosts a Flask-powered JSON API for fetching the current decimal time and republican date, or converting a given UNIX timestamp.
+
 ### RepublicanDate API
 
 | Value            | Instance method     | Format placeholder | Example               |
