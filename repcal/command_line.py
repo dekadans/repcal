@@ -2,7 +2,7 @@ import argparse
 from .RepublicanDate import RepublicanDate
 from .DecimalTime import DecimalTime
 from .RepublicanFormatter import RepublicanFormatter
-from datetime import datetime, timedelta, time, date
+from datetime import datetime, timedelta, time, date, timezone
 import re
 
 
@@ -40,7 +40,7 @@ def main():
 
 def get_default_date(paris_mean):
     if paris_mean:
-        dt = datetime.utcnow()
+        dt = datetime.now(timezone.utc)
         dt += timedelta(minutes=9, seconds=21)
     else:
         dt = datetime.now()

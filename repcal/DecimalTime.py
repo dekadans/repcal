@@ -27,6 +27,10 @@ class DecimalTime:
         midnight = datetime.combine(date.today(), time.fromisoformat('00:00:00'))
         target = datetime.combine(date.today(), standard_time)
 
+        # Correct for timezone-aware input
+        if target.tzinfo is not None and target.tzinfo.utcoffset(target) is not None:
+            midnight = midnight.astimezone(target.tzinfo)
+
         standard_seconds = (target - midnight).seconds
 
         second_ratio = 100 * 100 * 10 / (60 * 60 * 24)
