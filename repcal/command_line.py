@@ -10,9 +10,13 @@ def main():
     parser = argparse.ArgumentParser(description='Converts and prints date and time in the French Republican style.')
     parser.add_argument('date', help='The datetime ISO string to convert, defaults to current local time. May be full datetime or just date or time.', nargs='?')
     parser.add_argument('--format', help='A format definition string')
+    parser.add_argument('--decimal', action='store_true', help='Changes the default time representation from colon-separated to a decimal number.')
     parser.add_argument('--paris-mean', action='store_true', help='Changes default date from local time to Paris Mean Time.')
 
     args = parser.parse_args()
+
+    if args.decimal:
+        DecimalTime.default_formatting = '{%D}'
 
     default_format = []
     rdate = dtime = None

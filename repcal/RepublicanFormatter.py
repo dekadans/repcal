@@ -35,7 +35,8 @@ class RepublicanFormatter:
             time_data = {
                 '%H': self.dtime.hour,
                 '%M': self.dtime.minute,
-                '%S': self.dtime.second
+                '%S': self.dtime.second,
+                '%D': self.dtime.decimal
             }
 
         return {**time_data, **date_data}

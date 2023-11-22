@@ -10,12 +10,22 @@ class DecimalTime:
         self.hour = hour
         self.minute = minute
         self.second = second
+        self.decimal = self._make_decimal_value()
 
     def __str__(self):
         return self.get_formatter().format(self.default_formatting)
 
     def get_formatter(self):
         return RepublicanFormatter(dtime=self)
+
+    def _make_decimal_value(self):
+        if max(self.hour, self.minute, self.second) == 0:
+            return '0'
+
+        h = self.hour
+        m = f'{self.minute:02}' if max(self.minute, self.second) > 0 else ''
+        s = f'{self.second:02}' if self.second > 0 else ''
+        return f'0,{h}{m}{s}'.rstrip('0')
 
     @classmethod
     def from_standard_time(cls, standard_time):
