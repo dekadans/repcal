@@ -4,6 +4,10 @@ from .RepublicanFormatter import RepublicanFormatter
 
 
 class RepublicanDate:
+    """
+    A date in the French Republican calendar.
+    """
+
     default_formatting = '{%A} {%d} {%B} an {%Y}'
 
     months = ['Vendémiaire', 'Brumaire', 'Frimaire', 'Nivôse', 'Pluviôse', 'Ventôse',
@@ -26,9 +30,17 @@ class RepublicanDate:
         return RepublicanFormatter(rdate=self)
 
     def get_year_arabic(self) -> int:
+        """
+        Get the year as integer.
+        Example: 232
+        """
         return self.year
 
     def get_year_roman(self) -> str:
+        """
+        Get the year as roman numeral.
+        Example: CCXXXII
+        """
         letters = [
             ('M', 1000), ('CM', 900), ('D', 500), ('CD', 400),
             ('C', 100), ('XC', 90), ('L', 50), ('XL', 40),
@@ -46,24 +58,45 @@ class RepublicanDate:
         return roman
 
     def get_month(self) -> str:
+        """
+        Get the name of the month.
+        Example: Vendémiaire
+        """
         return self.months[self.month_index]
 
     def get_week_number(self) -> int:
+        """
+        Get the _décade_, the week number (1, 2 or 3) within the current month.
+        Example: 1
+        """
         return self.month_day_index // 10 + 1
 
     def get_day(self) -> int:
+        """
+        The day number (1-30) within the current month.
+        Example: 1
+        """
         return self.month_day_index+1
 
     def get_weekday(self) -> str:
+        """
+        Get the name of the day of the week.
+        Example: Primidi
+        """
         return self.days[self.week_day_index]
 
     def is_sansculottides(self) -> bool:
+        """
+        Check if the day is complementary.
+        Example: False
+        """
         return self.month_index == 12
 
     @classmethod
     def from_gregorian(cls, date_to_convert: date) -> Self:
         """
-        Converts a gregorian date to the corresponding date in the French republican calendar
+        Converts a gregorian date to the corresponding date in the French republican calendar.
+        Creates a RepublicanDate object from a datetime.date.
         """
         start = date(1792, 9, 22)
 

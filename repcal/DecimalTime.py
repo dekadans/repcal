@@ -5,13 +5,17 @@ from .RepublicanFormatter import RepublicanFormatter
 
 
 class DecimalTime:
+    """
+    A point in time in a 10-hour representation.
+    """
+
     default_formatting = '{%H}:{%M}:{%S}'
 
     def __init__(self, hour: int, minute: int, second: int):
-        self.hour = hour
-        self.minute = minute
-        self.second = second
-        self.decimal = self._make_decimal_value()
+        self.hour: int = hour
+        self.minute: int = minute
+        self.second: int = second
+        self.decimal: str = self._make_decimal_value()
 
     def __str__(self) -> str:
         return self.get_formatter().format(self.default_formatting)
@@ -31,7 +35,8 @@ class DecimalTime:
     @classmethod
     def from_standard_time(cls, standard_time: time) -> Self:
         """
-        Takes a time object and converts to decimal.
+        Converts regular 24-hour time to 10-hour decimal time.
+        Creates a DecimalTime object from a datetime.time.
         """
         midnight = datetime.combine(date.today(), time.fromisoformat('00:00:00'))
         target = datetime.combine(date.today(), standard_time)
