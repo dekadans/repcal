@@ -53,7 +53,7 @@ def validate_args(args):
             raise RepcalConsoleException('The --offset must be within 24 hours from UTC.')
 
 
-def parse_date(datestr):
+def parse_date(datestr: str) -> tuple[date | None, time | None]:
     is_time_re = re.compile('^[0-9]+:[0-9]+(:[0-9]+)?')
     is_date_re = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
     d = t = None
@@ -73,7 +73,7 @@ def parse_date(datestr):
     return d, t
 
 
-def get_default_date(args):
+def get_default_date(args) -> tuple[date, time]:
     if args.offset is not None:
         dt = datetime.now(timezone.utc)
         dt += timedelta(minutes=args.offset)
@@ -86,7 +86,7 @@ def get_default_date(args):
     return dt.date(), dt.time()
 
 
-def convert(d, t, output_format):
+def convert(d: date | None, t: time | None, output_format: str) -> str:
     default_format = []
     rdate = dtime = None
 

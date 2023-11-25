@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Self
 from .RepublicanFormatter import RepublicanFormatter
 
 
@@ -12,22 +13,22 @@ class RepublicanDate:
     days = ['Primidi', 'Duodi', 'Tridi', 'Quartidi', 'Quintidi',
             'Sextidi', 'Septidi', 'Octidi', 'Nonidi', 'Décadi']
 
-    def __init__(self, year, month_index, month_day_index, week_day_index):
+    def __init__(self, year: int, month_index: int, month_day_index: int, week_day_index: int):
         self.year = year
         self.month_index = month_index
         self.month_day_index = month_day_index
         self.week_day_index = week_day_index
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.get_formatter().format(self.default_formatting)
 
-    def get_formatter(self):
+    def get_formatter(self) -> RepublicanFormatter:
         return RepublicanFormatter(rdate=self)
 
-    def get_year_arabic(self):
+    def get_year_arabic(self) -> int:
         return self.year
 
-    def get_year_roman(self):
+    def get_year_roman(self) -> str:
         letters = [
             ('M', 1000), ('CM', 900), ('D', 500), ('CD', 400),
             ('C', 100), ('XC', 90), ('L', 50), ('XL', 40),
@@ -44,27 +45,25 @@ class RepublicanDate:
 
         return roman
 
-    def get_month(self):
+    def get_month(self) -> str:
         return self.months[self.month_index]
 
-    def get_week_number(self):
+    def get_week_number(self) -> int:
         return self.month_day_index // 10 + 1
 
-    def get_day(self):
+    def get_day(self) -> int:
         return self.month_day_index+1
 
-    def get_weekday(self):
+    def get_weekday(self) -> str:
         return self.days[self.week_day_index]
 
-    def is_sansculottides(self):
+    def is_sansculottides(self) -> bool:
         return self.month_index == 12
 
     @classmethod
-    def from_gregorian(cls, date_to_convert):
+    def from_gregorian(cls, date_to_convert: date) -> Self:
         """
         Converts a gregorian date to the corresponding date in the French republican calendar
-        :param date_to_convert: datetime.date
-        :return: RepublicanDate
         """
         start = date(1792, 9, 22)
 
@@ -95,11 +94,9 @@ class RepublicanDate:
         return cls(year, month, day_in_month, day_in_week)
 
     @staticmethod
-    def is_leap_year(year):
+    def is_leap_year(year: int) -> bool:
         """
-        Determines if a year in the French Republican calendar is a leap year
-        :param year: int
-        :return: Boolean
+        Determines if a year in the French Republican calendar is a leap year.
         """
         if year < 1:
             raise ValueError('Year is less than one')

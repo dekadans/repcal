@@ -1,34 +1,38 @@
 class RepublicanFormatter:
+    """
+    Utility for creating republican date/time strings using format placeholders.
+    """
+
     def __init__(self, rdate=None, dtime=None):
         """
-        :param rdate: RepublicanDate
-        :param dtime: DecimalTime
+        :type rdate: repcal.RepublicanDate.RepublicanDate | None
+        :type dtime: repcal.DecimalTime.DecimalTime | None
         """
-        self.rdate = rdate
-        self.dtime = dtime
+        self.date = rdate
+        self.time = dtime
 
-    def format(self, fstring: str):
+    def format(self, fstring: str) -> str:
         return fstring.format(**self._data())
 
-    def _data(self):
+    def _data(self) -> dict:
         time_data = date_data = {}
 
-        if self.rdate is not None:
+        if self.date is not None:
             date_data = {
-                '%Y': self.rdate.get_year_roman(),
-                '%y': self.rdate.get_year_arabic(),
-                '%B': self.rdate.get_month().lower() if self.rdate.get_month() is not None else '',
-                '%W': self.rdate.get_week_number() or '',
-                '%d': self.rdate.get_day() or '',
-                '%A': self.rdate.get_weekday().lower() if self.rdate.get_weekday() is not None else ''
+                '%Y': self.date.get_year_roman(),
+                '%y': self.date.get_year_arabic(),
+                '%B': self.date.get_month().lower() if self.date.get_month() is not None else '',
+                '%W': self.date.get_week_number() or '',
+                '%d': self.date.get_day() or '',
+                '%A': self.date.get_weekday().lower() if self.date.get_weekday() is not None else ''
             }
 
-        if self.dtime is not None:
+        if self.time is not None:
             time_data = {
-                '%H': self.dtime.hour,
-                '%M': self.dtime.minute,
-                '%S': self.dtime.second,
-                '%D': self.dtime.decimal
+                '%H': self.time.hour,
+                '%M': self.time.minute,
+                '%S': self.time.second,
+                '%D': self.time.decimal
             }
 
         return {**time_data, **date_data}

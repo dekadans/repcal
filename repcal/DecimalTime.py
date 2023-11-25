@@ -1,24 +1,25 @@
 from datetime import datetime, date, time
 from math import floor
+from typing import Self
 from .RepublicanFormatter import RepublicanFormatter
 
 
 class DecimalTime:
     default_formatting = '{%H}:{%M}:{%S}'
 
-    def __init__(self, hour, minute, second):
+    def __init__(self, hour: int, minute: int, second: int):
         self.hour = hour
         self.minute = minute
         self.second = second
         self.decimal = self._make_decimal_value()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.get_formatter().format(self.default_formatting)
 
-    def get_formatter(self):
+    def get_formatter(self) -> RepublicanFormatter:
         return RepublicanFormatter(dtime=self)
 
-    def _make_decimal_value(self):
+    def _make_decimal_value(self) -> str:
         if max(self.hour, self.minute, self.second) == 0:
             return '0'
 
@@ -28,11 +29,9 @@ class DecimalTime:
         return f'0,{h}{m}{s}'.rstrip('0')
 
     @classmethod
-    def from_standard_time(cls, standard_time):
+    def from_standard_time(cls, standard_time: time) -> Self:
         """
         Takes a time object and converts to decimal.
-        :param standard_time: datetime.time
-        :return: string
         """
         midnight = datetime.combine(date.today(), time.fromisoformat('00:00:00'))
         target = datetime.combine(date.today(), standard_time)
