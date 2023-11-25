@@ -8,15 +8,7 @@ class RepublicanFormatter:
         self.dtime = dtime
 
     def format(self, fstring: str):
-        fstring = self._clean(fstring)
         return fstring.format(**self._data())
-
-    def _clean(self, fstring: str):
-        if self.rdate is not None and self.rdate.is_sansculottides():
-            fstring = fstring.replace('{%d}', '').replace('{%B}', '')
-            fstring = ' '.join(fstring.split())
-
-        return fstring
 
     def _data(self):
         time_data = date_data = {}

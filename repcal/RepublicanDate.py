@@ -5,21 +5,12 @@ from .RepublicanFormatter import RepublicanFormatter
 class RepublicanDate:
     default_formatting = '{%A} {%d} {%B} an {%Y}'
 
-    months = ('Vendémiaire', 'Brumaire', 'Frimaire', 'Nivôse', 'Pluviôse', 'Ventôse',
+    months = ['Vendémiaire', 'Brumaire', 'Frimaire', 'Nivôse', 'Pluviôse', 'Ventôse',
               'Germinal', 'Floréal', 'Prairial', 'Messidor', 'Thermidor', 'Fructidor',
-              'Sansculottides')
+              'Jour complémentaire']
 
-    days = ('Primidi', 'Duodi', 'Tridi', 'Quartidi', 'Quintidi',
-            'Sextidi', 'Septidi', 'Octidi', 'Nonidi', 'Décadi')
-
-    sansculottides = (
-        'La Fête de la Vertu',
-        'La Fête du Génie',
-        'La Fête du Travail',
-        'La Fête de l\'Opinion',
-        'La Fête des Récompenses',
-        'La Fête de la Révolution'
-    )
+    days = ['Primidi', 'Duodi', 'Tridi', 'Quartidi', 'Quintidi',
+            'Sextidi', 'Septidi', 'Octidi', 'Nonidi', 'Décadi']
 
     def __init__(self, year, month_index, month_day_index, week_day_index):
         self.year = year
@@ -37,21 +28,11 @@ class RepublicanDate:
         return self.year
 
     def get_year_roman(self):
-        letters = (
-            ('M', 1000),
-            ('CM', 900),
-            ('D', 500),
-            ('CD', 400),
-            ('C', 100),
-            ('XC', 90),
-            ('L', 50),
-            ('XL', 40),
-            ('X', 10),
-            ('IX', 9),
-            ('V', 5),
-            ('IV', 4),
-            ('I', 1)
-        )
+        letters = [
+            ('M', 1000), ('CM', 900), ('D', 500), ('CD', 400),
+            ('C', 100), ('XC', 90), ('L', 50), ('XL', 40),
+            ('X', 10), ('IX', 9), ('V', 5), ('IV', 4), ('I', 1)
+        ]
 
         roman = ''
         years_left = self.year
@@ -64,19 +45,16 @@ class RepublicanDate:
         return roman
 
     def get_month(self):
-        return self.months[self.month_index] if not self.is_sansculottides() else None
+        return self.months[self.month_index]
 
     def get_week_number(self):
-        return (self.month_day_index // 10 + 1) if not self.is_sansculottides() else None
+        return self.month_day_index // 10 + 1
 
     def get_day(self):
         return self.month_day_index+1
 
     def get_weekday(self):
-        if self.is_sansculottides():
-            return self.sansculottides[self.week_day_index]
-        else:
-            return self.days[self.week_day_index]
+        return self.days[self.week_day_index]
 
     def is_sansculottides(self):
         return self.month_index == 12
