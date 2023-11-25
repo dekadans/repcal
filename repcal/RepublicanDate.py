@@ -17,11 +17,11 @@ class RepublicanDate:
     days = ['Primidi', 'Duodi', 'Tridi', 'Quartidi', 'Quintidi',
             'Sextidi', 'Septidi', 'Octidi', 'Nonidi', 'Décadi']
 
-    def __init__(self, year: int, month_index: int, month_day_index: int, week_day_index: int):
+    def __init__(self, year: int, month_index: int, month_day_index: int):
         self.year = year
         self.month_index = month_index
         self.month_day_index = month_day_index
-        self.week_day_index = week_day_index
+        self.week_day_index = month_day_index % 10
 
     def __str__(self) -> str:
         return self.get_formatter().format(self.default_formatting)
@@ -33,6 +33,7 @@ class RepublicanDate:
         """
         Get the year as integer.
         Example: 232
+        Format code: %y
         """
         return self.year
 
@@ -40,6 +41,7 @@ class RepublicanDate:
         """
         Get the year as roman numeral.
         Example: CCXXXII
+        Format code: %Y
         """
         letters = [
             ('M', 1000), ('CM', 900), ('D', 500), ('CD', 400),
@@ -50,45 +52,75 @@ class RepublicanDate:
         roman = ''
         years_left = self.year
 
-        for combination in letters:
-            while years_left >= combination[1]:
-                roman += combination[0]
-                years_left -= combination[1]
+        for letter, value in letters:
+            while years_left >= value:
+                roman += letter
+                years_left -= value
 
         return roman
 
-    def get_month(self) -> str:
+    def get_month(self) -> int:
         """
-        Get the name of the month.
+        Get the numeric representation of the month.
+        Regular months 1-12, complementary days will return 13.
+        Format code: %m
+        """
+        return self.month_index + 1
+
+    def get_month_name(self) -> str:
+        """
+        Get the textual representation of the month.
         Example: Vendémiaire
+        Format code: %B
         """
         return self.months[self.month_index]
 
-    def get_week_number(self) -> int:
+    def get_week(self) -> int:
         """
-        Get the _décade_, the week number (1, 2 or 3) within the current month.
-        Example: 1
+        The _décade_. The numeric representation of the week within the current month (1-3).
+        Format code: %W
         """
         return self.month_day_index // 10 + 1
 
+    def get_week_in_year(self) -> int:
+        """
+        The numeric representation of the week within the year (1-37).
+        Format code: %U
+        """
+        return (self.month_index * 3) + self.get_week()
+
     def get_day(self) -> int:
         """
-        The day number (1-30) within the current month.
-        Example: 1
+        The numeric representation of the day within the current month (1-30).
+        Format code: %d
         """
-        return self.month_day_index+1
+        return self.month_day_index + 1
 
-    def get_weekday(self) -> str:
+    def get_day_in_week(self) -> int:
         """
-        Get the name of the day of the week.
+        The numeric representation of the day within the current week (1-10).
+        Format code: %w
+        """
+        return self.week_day_index + 1
+
+    def get_day_in_year(self) -> int:
+        """
+        The numeric representation of the day within the current year (1-365/366).
+        Format code: %j
+        """
+        return (self.month_index * 30) + self.month_day_index + 1
+
+    def get_day_name(self) -> str:
+        """
+        Get the textual representation of the day.
         Example: Primidi
+        Format code: %A
         """
         return self.days[self.week_day_index]
 
     def is_sansculottides(self) -> bool:
         """
-        Check if the day is complementary.
-        Example: False
+        Check if the day is complementary (True/False).
         """
         return self.month_index == 12
 
@@ -122,9 +154,8 @@ class RepublicanDate:
 
         month = day_in_year // 30
         day_in_month = day_in_year % 30
-        day_in_week = day_in_month % 10
 
-        return cls(year, month, day_in_month, day_in_week)
+        return cls(year, month, day_in_month)
 
     @staticmethod
     def is_leap_year(year: int) -> bool:

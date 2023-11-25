@@ -21,10 +21,14 @@ class RepublicanFormatter:
             date_data = {
                 '%Y': self.date.get_year_roman(),
                 '%y': self.date.get_year_arabic(),
-                '%B': self.date.get_month().lower(),
-                '%W': self.date.get_week_number(),
+                '%m': self.date.get_month(),
+                '%B': self.date.get_month_name().lower(),
+                '%W': self.date.get_week(),
+                '%U': self.date.get_week_in_year(),
                 '%d': self.date.get_day(),
-                '%A': self.date.get_weekday().lower()
+                '%w': self.date.get_day_in_week(),
+                '%j': self.date.get_day_in_year(),
+                '%A': self.date.get_day_name().lower()
             }
 
         if self.time is not None:
