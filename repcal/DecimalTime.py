@@ -7,6 +7,11 @@ from .RepublicanFormatter import RepublicanFormatter
 class DecimalTime:
     """
     A point in time in a 10-hour representation.
+    Format codes:
+    Hour: %H
+    Minute: %M
+    Second: %S
+    Decimal value: %D
     """
 
     default_formatting = '{%H}:{%M}:{%S}'
