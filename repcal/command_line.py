@@ -54,7 +54,7 @@ def validate_args(args):
 
 
 def parse_date(datestr: str) -> tuple[date | None, time | None]:
-    is_time_re = re.compile('^[0-9]+:[0-9]+(:[0-9]+)?')
+    is_time_re = re.compile('^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$')
     is_date_re = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
     d = t = None
 
