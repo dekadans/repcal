@@ -22,7 +22,7 @@ def main():
     args = parser.parse_args()
 
     if args.decimal:
-        DecimalTime.default_formatting = '{%D}'
+        RepublicanFormatter.time_default = '{%D}'
 
     try:
         validate_args(args)
@@ -41,13 +41,13 @@ def main():
 
 def validate_args(args):
     if args.date is not None:
-        if args.paris_mean or args.offset:
+        if args.paris_mean or (args.offset is not None):
             raise RepcalConsoleException(
                 "Setting the UTC offset (using --offset or --paris-mean) "
                 "can not be used with an explicit datetime input."
             )
     else:
-        if args.paris_mean and args.offset:
+        if args.paris_mean and (args.offset is not None):
             raise RepcalConsoleException('--paris-mean and --offset are mutually exclusive.')
         if args.offset is not None and not (-1440 < args.offset < 1440):
             raise RepcalConsoleException('The --offset must be within 24 hours from UTC.')
@@ -86,25 +86,21 @@ def get_default_date(args) -> tuple[date, time]:
     return dt.date(), dt.time()
 
 
-def convert(d: date | None, t: time | None, output_format: str) -> str:
-    default_format = []
+def convert(d: date | None, t: time | None, output_format: str | None) -> str:
     rdate = dtime = None
 
     if t is not None:
         dtime = DecimalTime.from_standard_time(t)
-        default_format.append(DecimalTime.default_formatting)
     if d is not None:
         try:
             rdate = RepublicanDate.from_gregorian(d)
-            default_format.append(RepublicanDate.default_formatting)
         except ValueError as e:
             raise RepcalConsoleException(e)
 
-    default_format = ', '.join(default_format)
     formatter = RepublicanFormatter(rdate=rdate, dtime=dtime)
 
     try:
-        date_string = formatter.format(output_format or default_format)
+        date_string = formatter.format(output_format)
     except KeyError as e:
         raise RepcalConsoleException("Invalid format placeholder: {}".format(e))
 

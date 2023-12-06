@@ -14,8 +14,6 @@ class DecimalTime:
     Decimal value: %D
     """
 
-    default_formatting = '{%H}:{%M}:{%S}'
-
     def __init__(self, hour: int, minute: int, second: int):
         self.hour: int = hour
         self.minute: int = minute
@@ -23,7 +21,7 @@ class DecimalTime:
         self.decimal: str = self._make_decimal_value()
 
     def __str__(self) -> str:
-        return self.get_formatter().format(self.default_formatting)
+        return self.get_formatter().format(None)
 
     def get_formatter(self) -> RepublicanFormatter:
         return RepublicanFormatter(dtime=self)
@@ -52,7 +50,7 @@ class DecimalTime:
 
         standard_seconds = (target - midnight).seconds
 
-        second_ratio = 100 * 100 * 10 / (60 * 60 * 24)
+        second_ratio = (100 * 100 * 10) / (60 * 60 * 24)
         decimal_seconds = floor(standard_seconds * second_ratio)
 
         seconds_per_hour = 100 * 100

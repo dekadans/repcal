@@ -8,8 +8,6 @@ class RepublicanDate:
     A date in the French Republican calendar.
     """
 
-    default_formatting = '{%A} {%d} {%B} an {%Y}'
-
     months = ['Vendémiaire', 'Brumaire', 'Frimaire', 'Nivôse', 'Pluviôse', 'Ventôse',
               'Germinal', 'Floréal', 'Prairial', 'Messidor', 'Thermidor', 'Fructidor',
               'Jour complémentaire']
@@ -24,7 +22,7 @@ class RepublicanDate:
         self.week_day_index = month_day_index % 10
 
     def __str__(self) -> str:
-        return self.get_formatter().format(self.default_formatting)
+        return self.get_formatter().format(None)
 
     def get_formatter(self) -> RepublicanFormatter:
         return RepublicanFormatter(rdate=self)
