@@ -20,6 +20,13 @@ class DecimalTime:
         self.second: int = second
         self.decimal: str = self._make_decimal_value()
 
+    def __repr__(self) -> str:
+        return 'repcal.DecimalTime({}, {}, {})'.format(
+            self.hour,
+            self.minute,
+            self.second
+        )
+
     def __str__(self) -> str:
         return self.get_formatter().format(None)
 

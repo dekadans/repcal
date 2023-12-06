@@ -21,6 +21,13 @@ class RepublicanDate:
         self.month_day_index = month_day_index
         self.week_day_index = month_day_index % 10
 
+    def __repr__(self) -> str:
+        return 'repcal.RepublicanDate({}, {}, {})'.format(
+            self.year,
+            self.month_index,
+            self.month_day_index
+        )
+
     def __str__(self) -> str:
         return self.get_formatter().format(None)
 
