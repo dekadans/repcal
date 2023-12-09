@@ -48,12 +48,13 @@ class DecimalTime:
         Converts regular 24-hour time to 10-hour decimal time.
         Creates a DecimalTime object from a datetime.time.
         """
-        midnight = datetime.combine(date.today(), time.fromisoformat('00:00:00'))
-        target = datetime.combine(date.today(), standard_time)
 
         # Correct for timezone-aware input
-        if target.tzinfo is not None and target.tzinfo.utcoffset(target) is not None:
-            midnight = midnight.astimezone(target.tzinfo)
+        if standard_time.tzinfo is not None:
+            standard_time = standard_time.replace(tzinfo=None)
+
+        midnight = datetime.combine(date.today(), time.fromisoformat('00:00:00'))
+        target = datetime.combine(date.today(), standard_time)
 
         standard_seconds = (target - midnight).seconds
 
