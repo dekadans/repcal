@@ -1,3 +1,6 @@
+import os
+
+
 class RepublicanFormatter:
     """
     Utility for creating republican date/time strings using format placeholders.
@@ -22,11 +25,14 @@ class RepublicanFormatter:
         return (fstring or self.default()).format(**self._data())
 
     def default(self) -> str:
+        tf = os.environ.get('REPCAL_TIME_FORMAT') or self.time_default
+        df = os.environ.get('REPCAL_DATE_FORMAT') or self.date_default
+
         default_format = []
         if self.time is not None:
-            default_format.append(self.time_default)
+            default_format.append(tf)
         if self.date is not None:
-            default_format.append(self.date_default)
+            default_format.append(df)
 
         return ' - '.join(default_format)
 
