@@ -19,9 +19,9 @@ class RepublicanFormatter:
         Format the date and/or time using a string with placeholders for temporal properties.
         If given None it will use default patterns.
         """
-        return (fstring or self._default()).format(**self._data())
+        return (fstring or self.default()).format(**self._data())
 
-    def _default(self) -> str:
+    def default(self) -> str:
         default_format = []
         if self.time is not None:
             default_format.append(self.time_default)

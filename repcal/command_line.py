@@ -5,33 +5,44 @@ from .RepublicanFormatter import RepublicanFormatter
 from datetime import datetime, timedelta, time, date, timezone
 import re
 import logging
+from .format_hints import format_intro, date_table, time_table
 
 
 class RepcalConsoleException(Exception):
     pass
 
 
+class WrappedDateTime:
+    def __init__(self, d: date | None, t: time | None):
+        self.date = d
+        self.time = t
+
+
 def main():
     logging.basicConfig(format='%(levelname)s: %(message)s')
-    parser = argparse.ArgumentParser(description='Converts and prints date and time in the French Republican style.')
-    parser.add_argument('date', help='The ISO date and/or time to convert. Uses current local time is omitted.', nargs='?')
-    parser.add_argument('--decimal', action='store_true', help='Represent time as a decimal number.')
-    parser.add_argument('--format', help='Explicitly set the output format.')
-    parser.add_argument('--paris-mean', action='store_true', help='Use Paris Mean Time as offset (6.49 decimal minutes ahead of UTC).')
-    parser.add_argument('--offset', help='Override the local timezone with an offset in minutes from UTC.', type=int)
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(prog='repcal', description='Converts and prints date and time in the French Republican style.')
 
-    if args.decimal:
-        RepublicanFormatter.time_default = '{%D}'
+    parser.add_argument('-i', '--iso', help='ISO formatted date and/or time to convert.', metavar='DATE')
+    parser.add_argument('-u', '--utc-offset', help='Convert the current time with the given offset in minutes from UTC.', metavar='OFFSET', type=int)
+    parser.add_argument('-p', '--paris-mean', action='store_true', help='Use Paris Mean Time as offset (6.49 decimal minutes ahead of UTC).')
+
+    parser.add_argument('-f', '--format', help='Explicitly set the output format. An empty argument will print available formatting.', nargs='?', default='default')
+
+    args = parser.parse_args()
 
     try:
         validate_args(args)
-        if args.date is not None:
-            d, t = parse_date(args.date)
+        if args.iso is not None:
+            dt = parse_date(args.iso)
         else:
-            d, t = get_default_date(args)
+            dt = get_default_date(args)
 
-        result = convert(d, t, args.format)
+        formatter = create_formatter(dt)
+        output_format = get_format(args.format, formatter)
+        try:
+            result = formatter.format(output_format)
+        except KeyError as e:
+            raise RepcalConsoleException("Invalid format placeholder: {}".format(e))
     except RepcalConsoleException as e:
         logging.error(e)
         exit(1)
@@ -40,20 +51,20 @@ def main():
 
 
 def validate_args(args):
-    if args.date is not None:
-        if args.paris_mean or (args.offset is not None):
-            raise RepcalConsoleException(
-                "Setting the UTC offset (using --offset or --paris-mean) "
-                "can not be used with an explicit datetime input."
-            )
-    else:
-        if args.paris_mean and (args.offset is not None):
-            raise RepcalConsoleException('--paris-mean and --offset are mutually exclusive.')
-        if args.offset is not None and not (-1440 < args.offset < 1440):
-            raise RepcalConsoleException('The --offset must be within 24 hours from UTC.')
+    has_iso = args.iso is not None
+    has_offset = args.utc_offset is not None
+    has_paris = args.paris_mean is True
+
+    active = [m for m in [has_iso, has_offset, has_paris] if m is True]
+
+    if len(active) > 1:
+        raise RepcalConsoleException("The different input arguments (-i, -u, -p) are mutually exclusive.")
+
+    if args.utc_offset is not None and not (-1440 < args.utc_offset < 1440):
+        raise RepcalConsoleException('The --offset must be within 24 hours from UTC.')
 
 
-def parse_date(datestr: str) -> tuple[date | None, time | None]:
+def parse_date(datestr: str) -> WrappedDateTime:
     is_time_re = re.compile('^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$')
     is_date_re = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
     d = t = None
@@ -70,38 +81,51 @@ def parse_date(datestr: str) -> tuple[date | None, time | None]:
         except ValueError:
             raise RepcalConsoleException("Could not parse input '{}' as a date or time".format(datestr))
 
-    return d, t
+    return WrappedDateTime(d, t)
 
 
-def get_default_date(args) -> tuple[date, time]:
-    if args.offset is not None:
+def get_default_date(args) -> WrappedDateTime:
+    if args.utc_offset is not None:
         dt = datetime.now(timezone.utc)
-        dt += timedelta(minutes=args.offset)
+        dt += timedelta(minutes=args.utc_offset)
     elif args.paris_mean:
         dt = datetime.now(timezone.utc)
         dt += timedelta(minutes=9, seconds=21)
     else:
         dt = datetime.now()
 
-    return dt.date(), dt.time()
+    return WrappedDateTime(dt.date(), dt.time())
 
 
-def convert(d: date | None, t: time | None, output_format: str | None) -> str:
+def create_formatter(wrapped: WrappedDateTime) -> RepublicanFormatter:
     rdate = dtime = None
 
-    if t is not None:
-        dtime = DecimalTime.from_standard_time(t)
-    if d is not None:
+    if wrapped.time is not None:
+        dtime = DecimalTime.from_standard_time(wrapped.time)
+    if wrapped.date is not None:
         try:
-            rdate = RepublicanDate.from_gregorian(d)
+            rdate = RepublicanDate.from_gregorian(wrapped.date)
         except ValueError as e:
             raise RepcalConsoleException(e)
 
-    formatter = RepublicanFormatter(rdate=rdate, dtime=dtime)
+    return RepublicanFormatter(rdate=rdate, dtime=dtime)
 
-    try:
-        date_string = formatter.format(output_format)
-    except KeyError as e:
-        raise RepcalConsoleException("Invalid format placeholder: {}".format(e))
 
-    return date_string
+def get_format(format_arg: str | None, dt: RepublicanFormatter) -> str:
+    default_format = dt.default()
+
+    if format_arg is None:
+        default = re.sub('([{}])', r'\1'*2, default_format)
+        helptext = format_intro.format(default)
+
+        if dt.date is not None:
+            helptext += date_table
+        if dt.time is not None:
+            helptext += time_table
+
+        return helptext
+
+    if format_arg != 'default':
+        return format_arg
+
+    return default_format
