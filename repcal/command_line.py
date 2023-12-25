@@ -61,7 +61,7 @@ def validate_args(args):
         raise RepcalConsoleException("The different input arguments (-i, -u, -p) are mutually exclusive.")
 
     if args.utc_offset is not None and not (-1440 < args.utc_offset < 1440):
-        raise RepcalConsoleException('The --offset must be within 24 hours from UTC.')
+        raise RepcalConsoleException('The offset must be within 24 hours from UTC.')
 
 
 def parse_date(datestr: str) -> WrappedDateTime:
@@ -69,17 +69,17 @@ def parse_date(datestr: str) -> WrappedDateTime:
     is_date_re = re.compile('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
     d = t = None
 
-    if is_time_re.match(datestr):
-        t = time.fromisoformat(datestr)
-    elif is_date_re.match(datestr):
-        d = date.fromisoformat(datestr)
-    else:
-        try:
+    try:
+        if is_time_re.match(datestr):
+            t = time.fromisoformat(datestr)
+        elif is_date_re.match(datestr):
+            d = date.fromisoformat(datestr)
+        else:
             dt = datetime.fromisoformat(datestr)
             d = dt.date()
             t = dt.time()
-        except ValueError:
-            raise RepcalConsoleException("Could not parse input '{}' as a date or time".format(datestr))
+    except ValueError:
+        raise RepcalConsoleException("Could not parse input '{}' as a date or time".format(datestr))
 
     return WrappedDateTime(d, t)
 
