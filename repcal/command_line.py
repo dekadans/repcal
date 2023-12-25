@@ -22,7 +22,7 @@ def main():
     logging.basicConfig(format='%(levelname)s: %(message)s')
     parser = argparse.ArgumentParser(prog='repcal', description='Converts and prints date and time in the French Republican style.')
 
-    parser.add_argument('-i', '--iso', help='ISO formatted date and/or time to convert.', metavar='DATE')
+    parser.add_argument('-i', '--input', help='ISO formatted date and/or time to convert.', metavar='DATE')
     parser.add_argument('-u', '--utc-offset', help='Convert the current time with the given offset in minutes from UTC.', metavar='OFFSET', type=int)
     parser.add_argument('-p', '--paris-mean', action='store_true', help='Use Paris Mean Time as offset (6.49 decimal minutes ahead of UTC).')
 
@@ -32,8 +32,8 @@ def main():
 
     try:
         validate_args(args)
-        if args.iso is not None:
-            dt = parse_date(args.iso)
+        if args.input is not None:
+            dt = parse_date(args.input)
         else:
             dt = get_default_date(args)
 
@@ -51,11 +51,11 @@ def main():
 
 
 def validate_args(args):
-    has_iso = args.iso is not None
+    has_input = args.input is not None
     has_offset = args.utc_offset is not None
     has_paris = args.paris_mean is True
 
-    active = [m for m in [has_iso, has_offset, has_paris] if m is True]
+    active = [m for m in [has_input, has_offset, has_paris] if m is True]
 
     if len(active) > 1:
         raise RepcalConsoleException("The different input arguments (-i, -u, -p) are mutually exclusive.")
