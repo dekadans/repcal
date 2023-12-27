@@ -49,3 +49,30 @@ class DecimalTimeTest(unittest.TestCase):
         d = DecimalTime(3, 21, 74)
         self.assertEqual('repcal.DecimalTime(3, 21, 74)', repr(d))
 
+    def test_comparisons(self):
+        t1 = time.fromisoformat('03:05:54')
+        t2 = time.fromisoformat('14:18:12')
+        t3 = time.fromisoformat('22:56:00')
+        dt1 = DecimalTime.from_standard_time(t1)
+        dt1_2 = DecimalTime.from_standard_time(t1)
+        dt2 = DecimalTime.from_standard_time(t2)
+        dt3 = DecimalTime.from_standard_time(t3)
+
+        self.assertTrue(dt1 == dt1_2)
+        self.assertTrue(dt1 != dt2)
+        self.assertFalse(dt1 != dt1)
+        self.assertTrue(dt1 >= dt1_2)
+        self.assertTrue(dt1 <= dt1_2)
+        self.assertFalse(dt1 < dt1_2)
+        self.assertFalse(dt1 > dt1_2)
+
+        self.assertTrue(dt1 < dt2)
+        self.assertTrue(dt2 > dt1)
+        self.assertTrue(dt2 < dt3)
+        self.assertTrue(dt3 > dt2)
+
+        self.assertTrue(dt1 == t1)
+        self.assertTrue(dt1 != t2)
+        self.assertTrue(dt1 < t2)
+        self.assertTrue(dt2 > t1)
+

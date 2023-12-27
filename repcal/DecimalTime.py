@@ -2,6 +2,7 @@ from datetime import datetime, date, time
 from math import floor
 from typing import Self
 from .RepublicanFormatter import RepublicanFormatter
+import operator
 
 
 class DecimalTime:
@@ -20,13 +21,6 @@ class DecimalTime:
         self.second: int = second
         self.decimal: str = self._make_decimal_value()
 
-    def __repr__(self) -> str:
-        return 'repcal.DecimalTime({}, {}, {})'.format(
-            self.hour,
-            self.minute,
-            self.second
-        )
-
     def __str__(self) -> str:
         return self.get_formatter().format(None)
 
@@ -41,6 +35,39 @@ class DecimalTime:
         m = f'{self.minute:02}' if max(self.minute, self.second) > 0 else ''
         s = f'{self.second:02}' if self.second > 0 else ''
         return f'0,{h}{m}{s}'.rstrip('0')
+
+    def __repr__(self) -> str:
+        return 'repcal.DecimalTime({}, {}, {})'.format(
+            self.hour,
+            self.minute,
+            self.second
+        )
+
+    def _compare(self, other, op):
+        if isinstance(other, time):
+            other = DecimalTime.from_standard_time(other)
+
+        if isinstance(other, DecimalTime):
+            one = (self.hour, self.minute, self.second)
+            two = (other.hour, other.minute, other.second)
+            return op(one, two)
+
+        return NotImplemented
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
 
     @classmethod
     def from_standard_time(cls, standard_time: time) -> Self:

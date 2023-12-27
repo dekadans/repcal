@@ -107,3 +107,30 @@ class RepublicanDateTest(unittest.TestCase):
         self.assertEqual(6, rd1.get_day())
         self.assertEqual(13, rd1.get_month())
         self.assertTrue(rd1.is_sansculottides())
+
+    def test_comparisons(self):
+        d1 = date.fromisoformat('2023-01-14')
+        d2 = date.fromisoformat('2023-07-30')
+        d3 = date.fromisoformat('2023-12-31')
+        rd1 = RepublicanDate.from_gregorian(d1)
+        rd1_2 = RepublicanDate.from_gregorian(d1)
+        rd2 = RepublicanDate.from_gregorian(d2)
+        rd3 = RepublicanDate.from_gregorian(d3)
+
+        self.assertTrue(rd1 == rd1_2)
+        self.assertTrue(rd1 != rd2)
+        self.assertFalse(rd1 != rd1)
+        self.assertTrue(rd1 >= rd1_2)
+        self.assertTrue(rd1 <= rd1_2)
+        self.assertFalse(rd1 < rd1_2)
+        self.assertFalse(rd1 > rd1_2)
+
+        self.assertTrue(rd1 < rd2)
+        self.assertTrue(rd2 > rd1)
+        self.assertTrue(rd2 < rd3)
+        self.assertTrue(rd3 > rd2)
+
+        self.assertTrue(rd1 == d1)
+        self.assertTrue(rd1 != d2)
+        self.assertTrue(rd1 < d2)
+        self.assertTrue(rd2 > d1)

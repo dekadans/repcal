@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Self
 from .RepublicanFormatter import RepublicanFormatter
+import operator
 
 
 class RepublicanDate:
@@ -20,13 +21,6 @@ class RepublicanDate:
         self.month_index = month_index
         self.month_day_index = month_day_index
         self.week_day_index = month_day_index % 10
-
-    def __repr__(self) -> str:
-        return 'repcal.RepublicanDate({}, {}, {})'.format(
-            self.year,
-            self.month_index,
-            self.month_day_index
-        )
 
     def __str__(self) -> str:
         return self.get_formatter().format(None)
@@ -128,6 +122,39 @@ class RepublicanDate:
         Check if the day is complementary (True/False).
         """
         return self.month_index == 12
+
+    def __repr__(self) -> str:
+        return 'repcal.RepublicanDate({}, {}, {})'.format(
+            self.year,
+            self.month_index,
+            self.month_day_index
+        )
+
+    def _compare(self, other, op):
+        if isinstance(other, date):
+            other = RepublicanDate.from_gregorian(other)
+
+        if isinstance(other, RepublicanDate):
+            one = (self.year, self.month_index, self.month_day_index)
+            two = (other.year, other.month_index, other.month_day_index)
+            return op(one, two)
+
+        return NotImplemented
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
 
     @classmethod
     def from_gregorian(cls, date_to_convert: date) -> Self:
