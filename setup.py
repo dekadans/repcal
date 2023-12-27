@@ -6,9 +6,8 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="repcal",
     packages=['repcal'],
-    version="1.2.1",
+    version="2.0.0",
     author="Tomas Thelander",
-    author_email="tomas@tthe.se",
     description="The French Republican calendar and decimal time in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +18,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.11',
     entry_points={
         "console_scripts": [
             'repcal=repcal.command_line:main'
