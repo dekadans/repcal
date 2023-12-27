@@ -25,7 +25,7 @@ $ repcal
 
 `-i DATE, --input DATE`
 
-This parameter accepts a specific date and/or time in ISO format and will print it's republican counterpart.
+This parameter accepts a specific date and/or time in ISO format and will print its republican counterpart.
 
 ```
 $ repcal -i '1969-07-20 20:17:40'
