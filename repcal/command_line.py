@@ -20,7 +20,8 @@ class WrappedDateTime:
 
 def main():
     logging.basicConfig(format='%(levelname)s: %(message)s')
-    parser = argparse.ArgumentParser(prog='repcal', description='Converts and prints date and time in the French Republican style.')
+    read_more = 'Read more about usage at: https://github.com/dekadans/repcal'
+    parser = argparse.ArgumentParser(prog='repcal', description='Converts and prints date and time in the French Republican style.', epilog=read_more)
 
     parser.add_argument('-i', '--input', help='ISO formatted date and/or time to convert.', metavar='DATE')
     parser.add_argument('-u', '--utc-offset', help='Convert the current time with the given offset in minutes from UTC.', metavar='OFFSET', type=int)

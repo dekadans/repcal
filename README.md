@@ -1,84 +1,93 @@
-## Repcal
+# Repcal
 
-A script that converts date and time to the systems used by the French Republic, the calendar from 1793 to 1805 and decimal time for about a year between 1794 and 1795.
-More information can be found on [Wikipedia](https://en.wikipedia.org/wiki/French_Republican_calendar).
+A small application that converts date and time to the systems used by the French First Republic.
+
+The calendar from 1793 to 1805 and decimal time for about a year between 1794 and 1795. More information can be found on [Wikipedia](https://en.wikipedia.org/wiki/French_Republican_calendar).
 
 It uses the Romme method of calculating leap years, as in keeping the ones used by the French Republic and using the Gregorian rules for the years after the calendar was abolished.
 
-### Installation
+## CLI Tool
+
+Installation using [pipx](https://github.com/pypa/pipx):
 
 ```
-$ pip install repcal
+$ pipx install repcal
 ```
 
-### Usage
-
-The current local time is used by default.
+When called without any parameters it will print the current local time and date:
 
 ```
 $ repcal
-5:80:63, quartidi 24 brumaire an CCXXIX
+7:76:5 - Septidi 7 nivôse an CCXXXII
 ```
 
-Or, for the full Republican experience, it can default to Paris Mean Time (6.49 decimal minutes ahead of GMT).
+### Conversions
+
+`-i DATE, --input DATE`
+
+This parameter accepts a specific date and/or time in ISO format and will print it's republican counterpart.
 
 ```
-$ repcal --paris-mean
-5:45:47, quartidi 24 brumaire an CCXXIX
+$ repcal -i '1969-07-20 20:17:40'
+8:45:60 - Primidi 1 thermidor an CLXXVII
 ```
 
-It also accepts date, time and format as arguments.
+### UTC Offset
+
+`-u OFFSET, --utc-offset OFFSET`
+
+This parameter is used to get the current date and time for a given number of standard minutes from UTC. For example, the current time in New York (EST, UTC-05:00):
 
 ```
-$ repcal '1969-07-20 20:17:40'
-8:45:60, primidi 1 thermidor an CLXXVII
-
-$ repcal '1969-07-20'
-primidi 1 thermidor an CLXXVII
-
-$ repcal '20:17:40'
-8:45:60
-
-$ repcal '1969-07-20' --format '{%d} {%B}'
-1 thermidor
+$ repcal -u -300
 ```
 
-### As a Python package
+### Paris Mean Time
 
-```python
+`-p, --paris-mean`
+
+For the full republican experience, it can also use Paris Mean Time (6.49 decimal minutes ahead of UTC).
+
+### Output Formatting
+
+`-f [FORMAT], --format [FORMAT]`
+
+The default output format can be overridden with a string containing placeholders for specific datetime values.
+
+```
+$ repcal -i '1969-07-20' -f '{%d} {%+B}'
+1 Thermidor
+```
+
+Using `-f, --format` without a provided format string will print a [cheat sheet](repcal/format_hints.py) of available placeholders.
+
+The format can also be set using the environment variables `REPCAL_DATE_FORMAT` and `REPCAL_TIME_FORMAT`:
+
+```
+$ REPCAL_DATE_FORMAT='{%d} {%+B}' repcal -i '1969-07-20'
+```
+
+
+## Python Package
+
+The script can also installed with `pip` and used as a package in other Python projects:
+
+```python  
 from repcal import RepublicanDate, DecimalTime
 from datetime import datetime
 
-n = datetime.now()
+n = datetime.fromisoformat('1969-07-20 20:17:40')
 rd = RepublicanDate.from_gregorian(n.date())
 dt = DecimalTime.from_standard_time(n.time())
 
-print(rd) # quartidi 24 brumaire an CCXXIX
-print(dt) # 5:79:47
+# The objects have standard string representations,...
+print(rd) # Primidi 1 thermidor an CLXXVII
+print(dt) # 8:45:60
+
+# ...access to specific properties...
+print(rd.get_year_roman()) # CLXXVII
+print(dt.decimal) # 0,8456
+
+# ...and formatting.
+print(rd.get_formatter().format('{%d} {%+B}')) # 1 Thermidor
 ```
-
-### As a web service
-
-[Repcal.info](https://repcal.info) hosts a Flask-powered JSON API for fetching the current decimal time and republican date, or converting a given UNIX timestamp.
-
-### RepublicanDate API
-
-| Value            | Instance method     | Format placeholder | Example               |
-| ---------------- | ------------------- | ------------------ | --------------------- |
-| Year (arabic)    | get_year_arabic()   | %y                 | _219_                 |
-| Year (roman)     | get_year_roman()    | %Y                 | _CCXXIX_              |
-| Month            | get_month()         | %B                 | _vendémiaire_         |
-| Week (décade)    | get_week_number()   | %W                 | _3_                   |
-| Day in month     | get_day()           | %d                 | _28_                  |
-| Day in week      | get_weekday()       | %A                 | _octidi_              |
-| Is complementary | is_sansculottides() | --                 | _false_               |
-
-
-### DecimalTime API
-
-| Value            | Property | Format placeholder | Example               |
-| ---------------- | -------- | ------------------ | --------------------- |
-| Hour             | hour     | %H                 | _8_                   |
-| Minute           | minute   | %M                 | _1_                   |
-| Second           | second   | %S                 | _65_                  |
-
